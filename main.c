@@ -7,83 +7,98 @@
 int screen_width = 600;
 int screen_height = 600;
 
+typedef struct
+{
+    Rectangle snake_rect;
+    Vector2 speed;
+
+} Snake;
+
 int main()
 {
     InitWindow(screen_width, screen_height, "Snake");
     SetTargetFPS(60);
-    int frame_cnt = 0, collision = 0, length = 0, i = 1;
+    int frame_cnt = 0, collision = 0, length = 0;
 
     // intialize snake
-    Rectangle snake[SNAKE_LENGTH];
-    snake[0].x = 0;
-    snake[0].y = 0;
-    snake[0].width = 40;
-    snake[0].height = 40;
+    Snake snake[SNAKE_LENGTH];
+    snake[0].snake_rect.x = -1;
+    snake[0].snake_rect.y = -1;
+    snake[0].snake_rect.width = GRID_BOX;
+    snake[0].snake_rect.height = GRID_BOX;
+
+    snake[0].speed = (Vector2){GRID_BOX, 0};
 
     // intialize food
     Rectangle food = {
-        200,200,
+        200, 200,
         GRID_BOX,
         GRID_BOX};
 
-
     while (!WindowShouldClose())
     {
-        
-// ---------------------------------------------------------------------------------------------------------
-// Update
-// ---------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------
+        // Update
+        // ---------------------------------------------------------------------------------------------------------
 
         frame_cnt++;
 
-        // check is the desired key pressed and only move the player every 4 frames
-        // if the second condition isn't accounted for ,
+        // The key must be only "pressed" not "down"
+        // which means that we only need to tab on the key, not keep it down all the movement duration
+        //notice: here we only assign a value (which iss GRID_BOX) to the speed.x or speed.y
+        if (IsKeyPressed(KEY_DOWN))
+        {
+            snake[0].speed = (Vector2){0, GRID_BOX};
+        }
+        if (IsKeyPressed(KEY_UP))
+        {
+            snake[0].speed = (Vector2){0, -GRID_BOX};
+        }
+        if (IsKeyPressed(KEY_RIGHT))
+        {
+            snake[0].speed = (Vector2){GRID_BOX, 0};
+        }
+        if (IsKeyPressed(KEY_LEFT))
+        {
+
+            snake[0].speed = (Vector2){-GRID_BOX, 0};
+        }
+
+        // and only move the player every 4 frames
+        // if it isn't accounted for ,
         //  the player move multiple grid boxes per frame (very fast) and not a grid box per time.
         // why 4? just tried it and saw what's best
-        if (IsKeyDown(KEY_DOWN) && (frame_cnt % 4 == 0))
+        //notice: here, we use the speed assigned above to actually move the snake
+        if (frame_cnt % 4 == 0)
         {
-            snake[0].y += GRID_BOX;
-        }
-        if (IsKeyDown(KEY_UP) && (frame_cnt % 4 == 0))
-        {
-            snake[0].y -= GRID_BOX;
+            snake[0].snake_rect.x += snake[0].speed.x;
+            snake[0].snake_rect.y += snake[0].speed.y;
         }
 
-        if (IsKeyDown(KEY_RIGHT) && (frame_cnt % 4 == 0))
-        {
-            snake[0].x += GRID_BOX;
-        }
-
-        if (IsKeyDown(KEY_LEFT) && (frame_cnt % 4 == 0))
-        {
-            snake[0].x -= GRID_BOX;
-        }
-
-        
         // For a screen of size 600 x 600:
-        // we need the food to be exactly on a grid box,not any random GetMousePosition
+        // we need the food to be exactly on a grid box,not any random position
         // so, we randomly choose a row and a column
-        // the screen width = 600 , the grid box width = 40 , so we have 15 lines 
+        // the screen width = 600 , the grid box width = 40 , so we have 15 lines
         // so we randomly choose from (0,14)
         int random_col = GetRandomValue(0, (screen_width / GRID_BOX) - 1);
         int random_row = GetRandomValue(0, (screen_height / GRID_BOX) - 1);
 
         // collision with food
-        collision = CheckCollisionRecs(snake[0], food);
-        if (collision)
-        {
-            length++;
+        collision = CheckCollisionRecs(snake[0].snake_rect, food);
+            if (collision)
+            {
+                length++;
+                
+                // After we have randomly choosen a row and a col , turn these value into pixels
+                // hence , we multiply by the grid dimension
+                food.x = random_col * GRID_BOX;
+                food.y = random_row * GRID_BOX;
+                collision = 0;
+            }
 
-            //After we have random;y choosen a row and a col , turn these value into pixels
-            //hence , we multiply by yhe grid dimension
-            food.x = (random_col + 1) * GRID_BOX;
-            food.y = (random_row + 1) * GRID_BOX;
-            collision = 0;
-        }
-
-// ---------------------------------------------------------------------------------------------------------
-// Drawing
-// ---------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------
+        // Drawing
+        // ---------------------------------------------------------------------------------------------------------
         BeginDrawing();
         ClearBackground(LIGHTGRAY);
 
@@ -100,11 +115,11 @@ int main()
         }
 
         // Draw Player
-        DrawRectangleRec(snake[0], BLACK);
+        DrawRectangleRec(snake[0].snake_rect, BLACK);
 
         // Draw food
         DrawRectangleRec(food, BLUE);
-        DrawText(TextFormat("length %i",length),5,5,20,BLACK);
+        DrawText(TextFormat("length %i", length), 5, 5, 20, BLACK);
         EndDrawing();
     }
 
