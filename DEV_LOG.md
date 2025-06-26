@@ -1,11 +1,44 @@
-## Snake Game Dev
-### TO DO
+# Snake Game Dev Log
+## Game Logic
+
+### movement and player control
+- The player controls the direction of movement of the snake through keyboard keys (UP, DOWN, LEFT, RIGHT)
+- Keys must be "pressed" (not held down) to change direction - uses IsKeyPressed() instead of IsKeyDown()
+- Each key set the speed position :
+    KEY_RIGHT => speed {x,0}
+    KEY_DOWN => speed {0,y}
+- Then for each 4 frames, the snake uses the stored speed coordinates to actually move
+- The snake moves every 4 frames to prevent the snake to move very fast.
+
+### The snake's body 
+- snake is an array of structs each struct stores rectangle properties and speed
+- the body of the snake is segments.
+- we store the poistion of each segment in snake_prev_pos[] and then uses it 
+- when head moves to its next position, the following segment takes the previous position of the head
+- What if you have 3 segments?
+    Segment 1 moves to where the head was
+    Segment 2 moves to where segment 1 was
+    Segment 3 moves to where segment 2 was
+
+### Randomize Food
+- we choose rows and columns randomly through GetRandomValue()
+- then convert them into pixels to assign them to the coordinates of the food rectangle
+- For the result to appear : Food position randomized but fitting completely into grid cells
+
+### Collision between snake and food 
+- we use CheckCollisionRecs(), to determine if the food and the snake[0]'s head collided or not
+- When collision happens, we set the flag to 1 and increment the length of the snake.
+
+<br/>
+
+## TO DO
 1. make the tail bend 
 2. start the game running ✅
-3. collision logic
+3. collision logic ✅
 4. drawing the length of the snake
 5. When are you losing the game?
 6. Game states
+7. collision with own tail
 
 
 ### [ Tuesday 24-6-2025  03:03 ] :
@@ -17,7 +50,7 @@
 
 ### [ Wednesday 25-6-2025  00:00 ] :
 1. fixed that randomly disappearing food from yesterday
-2. Improved key controls,
+2. Improved key controls
 3. implemented player movement with speed 
-4. 
-5. 
+4. implemented the body logic but there's still a problem with drawing the tail??!
+![Snake2025-06-2603-16-17-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/3d3dbb3a-3103-4701-995f-8b35a0d67e35)
