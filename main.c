@@ -3,8 +3,10 @@
 #define GRID_BOX 40
 #define SNAKE_LENGTH 210
 
-int screen_width = 600;
+
+int screen_width = 800;
 int screen_height = 600;
+
 
 typedef struct
 {
@@ -49,7 +51,7 @@ int main()
     for (int i = 0; i < SNAKE_LENGTH; i++)
     {
         // -(i*GRID_BOX) to intialize x coordinate of each segment right behind its previous one
-        snake[i].snake_rect = (Rectangle){-(i * GRID_BOX), 0, GRID_BOX, GRID_BOX};
+        snake[i].snake_rect = (Rectangle){-(i * GRID_BOX), GRID_BOX, GRID_BOX, GRID_BOX};
     }
     snake[0].speed = (Vector2){GRID_BOX, 0}; // the intial speed is in +ve X-axis direction
 
@@ -159,8 +161,8 @@ int main()
             // After we have randomly choosen a row and a col , turn these value into pixels
             // hence , we multiply by the grid dimension
 
-            food.x = (GetRandomValue(0, (screen_width / GRID_BOX) - 1)) * GRID_BOX;
-            food.y = (GetRandomValue(0, (screen_height / GRID_BOX) - 1)) * GRID_BOX;
+            food.x = (GetRandomValue(1, (screen_width / GRID_BOX) - 2)) * GRID_BOX;
+            food.y = (GetRandomValue(1, (screen_height / GRID_BOX) - 2)) * GRID_BOX;
             // now food is active because it's where we check for intersection
 
             // here he checks if the food.x equals the head's x (snake[0]):
@@ -172,8 +174,8 @@ int main()
             {
                 if ((food.x == snake[i].snake_rect.x) && (food.y == snake[i].snake_rect.y))
                 {
-                    food.x = (GetRandomValue(0, (screen_width / GRID_BOX) - 1)) * GRID_BOX;
-                    food.y = (GetRandomValue(0, (screen_height / GRID_BOX) - 1)) * GRID_BOX;
+                    food.x = (GetRandomValue(1, (screen_width / GRID_BOX) - 2)) * GRID_BOX;
+                    food.y = (GetRandomValue(1, (screen_height / GRID_BOX) - 2)) * GRID_BOX;
                     i = 0;
                 }
                 else
@@ -220,16 +222,18 @@ int main()
         BeginDrawing();
         ClearBackground(LIGHTGRAY);
 
-        // Draw Grid
-        for (int i = 0; i < screen_height; i += GRID_BOX)
+        // Draw Grid - here we are iterating using i as cols and rows not pixels
+            //vertical lines
+        for (int i = 1; i < screen_height/GRID_BOX; i++)
         {
 
-            DrawLineV((Vector2){0, i}, (Vector2){screen_width, i}, GRAY);
+            DrawLineV((Vector2){1*GRID_BOX, i*GRID_BOX}, (Vector2){(screen_width-GRID_BOX), i*GRID_BOX}, GRAY);
         }
-        for (int i = 0; i < screen_width; i += GRID_BOX)
+            //Horizontal
+        for (int i = 1; i < screen_width/GRID_BOX; i++)
         {
 
-            DrawLineV((Vector2){i, 0}, (Vector2){i, screen_height}, GRAY);
+            DrawLineV((Vector2){i*GRID_BOX, 1*GRID_BOX}, (Vector2){i*GRID_BOX, (screen_height - GRID_BOX)}, GRAY);
         }
 
         // Draw Player
