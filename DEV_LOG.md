@@ -38,23 +38,32 @@
     - Then increment the length of the snake.
 
 ### Losing the game
-- 
-- 
-- 
+- We Lose the game when:
+    1. The snake eates itself
+        - check if the head coordinates would intersects with any segment of the body
+        - if true, indicate game over
+        - 
+    2. The snake hit a border of the play fiels 
+        - check head's x with play field's x as well as y
+        - 
+        - 
+
 
 
 <br/>
 
 ## TO DO
-1. make the tail bend ✅
-2. start the game running ✅
-3. collision logic ✅
-4. drawing the length of the snake ✅
-5. When are you losing the game?
-6. Game states
-7. food position shouldn't intersect with the snake's tail ✅
-8. Score 
-9. Adjust play field, all the controls,...etc
+- [x] make the tail bend 
+- [x] start the game running 
+- [x] collision logic 
+- [x] drawing the length of the snake 
+- [ ] When are you losing the game?
+- [ ] Game states
+- [x] food position shouldn't intersect with the snake's tail 
+- [ ] Scoring system, highest score,... etc
+- [x] Adjust play field all the controls,...etc
+- [ ] all the controls(p=>pause , ENTER => play , ESC => Exist,...etc)
+- [x] Organize the code more clearly
 
 
 ### [ Tuesday 24-6-2025  03:03 ] :
@@ -77,6 +86,15 @@
 2. allowe movement only in one direction (the snake can't move left while it moves right) AKA reversal or 180-deg turn. Acomplished that through checking if the speed in the desired direction is zero
 3. Updated Randomized food logic (now the food will not appear on the sanke's tail (on a position where the snake has segments))
 ![Snake2025-06-2704-03-09-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/ad144ffd-ff7d-4fda-8398-b1d84c1d131c)
+
+
+### [ Thursday 26-6-2025  03:00 ] :
+1. modified screen width and added padding around the play field
+2. An overdue task that should have been sone earlir : organized the code more clearly
+3. 
+4. 
+
+
 
 
 
