@@ -24,7 +24,6 @@ typedef struct
 
 } Snake;
 
-
 typedef enum State
 {
     start_screen = 0,
@@ -32,7 +31,6 @@ typedef enum State
     pause_screen,
     game_over,
 } State;
-
 
 extern int screen_width;
 extern int screen_height;
