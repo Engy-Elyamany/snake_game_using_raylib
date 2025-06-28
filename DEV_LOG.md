@@ -8,8 +8,8 @@
 - Each key set the speed position :
     - KEY_RIGHT => speed {x,0}
     - KEY_DOWN => speed {0,y}
-- Then for each 4 frames, the snake uses the stored speed coordinates to actually move
-- The snake moves every 4 frames to prevent the snake to move very fast.
+- Then for each 6 frames, the snake uses the stored speed coordinates to actually move
+- The snake moves every 6 frames to prevent the snake to move very fast.
 
 ### The snake's body 
 - snake is an array of structs each struct stores rectangle properties and speed
@@ -35,7 +35,8 @@
 - we use CheckCollisionRecs(), to determine if the food and the snake[0]'s head collided or not
 - When collision happens:
     -  we set the valid_food_position flag to 0 to indicate the need for the next valid position
-    - Then increment the length of the snake.
+    -  Then increment the length of the snake.
+    -  each new segment is placed exactly where the previous tail segment was using the updated length.
 
 ### Losing the game
 - We Lose the game when:
@@ -94,10 +95,10 @@
 6. a weird bug keeps on happening on first collision, still trying to figure it out !!!
 
 
-### [ Friday 27-6-2025  05:30 ] :
+### [ Friday 27-6-2025  03:00 ] :
 1. Changed Colors of the game
-2. Still that weird bug at the beginning????!
-3. 
+2. Solved the glitch that was happening with the first collision
+3. improved the text on different state screens
 
 
 
