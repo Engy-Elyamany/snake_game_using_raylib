@@ -42,11 +42,8 @@
     1. The snake eates itself
         - check if the head coordinates would intersects with any segment of the body
         - if true, indicate game over
-        - 
     2. The snake hit a border of the play fiels 
-        - check head's x with play field's x as well as y
-        - 
-        - 
+        - check head's coordinates with play field's coordinates
 
 
 
@@ -57,12 +54,12 @@
 - [x] start the game running 
 - [x] collision logic 
 - [x] drawing the length of the snake 
-- [ ] When are you losing the game?
-- [ ] Game states
+- [x] When are you losing the game?
+- [x] Game states
 - [x] food position shouldn't intersect with the snake's tail 
-- [ ] Scoring system, highest score,... etc
+- [x] Scoring system, highest score,... etc
 - [x] Adjust play field all the controls,...etc
-- [ ] all the controls(p=>pause , ENTER => play , ESC => Exist,...etc)
+- [x] all the controls(p=>pause , ENTER => play , ESC => Exist,...etc)
 - [x] Organize the code more clearly
 
 
@@ -88,11 +85,21 @@
 ![Snake2025-06-2704-03-09-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/ad144ffd-ff7d-4fda-8398-b1d84c1d131c)
 
 
-### [ Thursday 26-6-2025  03:00 ] :
+### [ Friday 27-6-2025  05:30 ] :
 1. modified screen width and added padding around the play field
 2. An overdue task that should have been sone earlir : organized the code more clearly
+3. implemented losing logic
+4. Handeled different states of the game 
+5. Intial try on colors
+6. a weird bug keeps on happening on first collision, still trying to figure it out !!!
+
+
+### [ Friday 27-6-2025  05:30 ] :
+1. Changed Colors of the game
+2. Still that weird bug at the beginning????!
 3. 
-4. 
+
+
 
 
 

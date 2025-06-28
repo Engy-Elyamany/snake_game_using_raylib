@@ -9,12 +9,75 @@ static bool valid_food_pos = 1;
 // intialize snake
 static Snake snake[SNAKE_LENGTH];
 Vector2 snake_prev_pos[SNAKE_LENGTH];
-static Rectangle food ;
-State game_state;
+static Rectangle food;
+State game_state = start_screen;
+
+void execute()
+{
+    snake_movement();
+    food_randomization();
+    collision_logic();
+    losing_logic();
+}
+
+void handle_game_state()
+{
+    switch (game_state)
+    {
+    case start_screen:
+    {
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            game_state = game_play;
+        }
+    }
+    break;
+
+    case game_play:
+    {
+        if (IsKeyPressed(KEY_P))
+        {
+            game_state = pause_screen;
+        }
+        else
+        {
+            execute();
+            if (game_state == game_over)
+            {
+                game_state = game_over;
+            }
+        }
+    }
+    break;
+    case pause_screen:
+    {
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            game_state = game_play;
+        }
+    }
+    break;
+
+    case game_over:
+    {
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            init_game();
+            
+            game_state = game_play;
+        }
+    }
+    break;
+    default:
+        break;
+    }
+}
 
 void init_game()
 {
-
+    length = 0;
+    frame_cnt = 0;
+    valid_food_pos = 1;
     // here we intialize all segments of the snake body to be able to store them in the first place
     //  Then , we use these stored positions to create the flow of the tail
     //  each 4 frames, we move the head with the stored speed and update the segments accordingly
@@ -26,14 +89,16 @@ void init_game()
     snake[0].speed = (Vector2){GRID_BOX, 0}; // the intial speed is in +ve X-axis direction
 
     // intialize food
-    food = (Rectangle){200, 200, GRID_BOX, GRID_BOX};
+    food = (Rectangle){(GetRandomValue(2, (screen_width / GRID_BOX) - 3)) * GRID_BOX,
+                (GetRandomValue(2, (screen_height / GRID_BOX) - 3)) * GRID_BOX,
+                       GRID_BOX,
+                       GRID_BOX};
 
     game_state = start_screen;
 }
 
 void snake_movement()
 {
-
     frame_cnt++;
 
     // The key must be only "pressed" not "down"
@@ -109,11 +174,10 @@ void food_randomization()
         // After we have randomly choosen a row and a col , turn these value into pixels
         // hence , we multiply by the grid dimension
 
-        food.x = (GetRandomValue(1, (screen_width / GRID_BOX) - 2)) * GRID_BOX;
-        food.y = (GetRandomValue(1, (screen_height / GRID_BOX) - 2)) * GRID_BOX;
-        // now food is active because it's where we check for intersection
+       food.x = (GetRandomValue(2, (screen_width / GRID_BOX) - 3)) * GRID_BOX;
+                food.y = (GetRandomValue(2, (screen_height / GRID_BOX) - 3)) * GRID_BOX;
 
-        // here he checks if the food.x equals the head's x (snake[0]):
+        // here we checks if the food.x equals the head's x (snake[0]):
         // if true, generate new coordinates and recheck with the head's x (snake[0])
         // if false, then check with the next segment of the snake (snake[1])
         // and so on for the whole length of the snake
@@ -122,8 +186,8 @@ void food_randomization()
         {
             if ((food.x == snake[i].snake_rect.x) && (food.y == snake[i].snake_rect.y))
             {
-                food.x = (GetRandomValue(1, (screen_width / GRID_BOX) - 2)) * GRID_BOX;
-                food.y = (GetRandomValue(1, (screen_height / GRID_BOX) - 2)) * GRID_BOX;
+                food.x = (GetRandomValue(2, (screen_width / GRID_BOX) - 3)) * GRID_BOX;
+                food.y = (GetRandomValue(2, (screen_height / GRID_BOX) - 3)) * GRID_BOX;
                 i = 0;
             }
             else
@@ -140,11 +204,8 @@ void food_randomization()
 
 void collision_logic()
 {
-
-    bool collision = 0;
-
     // collision with food
-    collision = CheckCollisionRecs(snake[0].snake_rect, food);
+    bool collision = CheckCollisionRecs(snake[0].snake_rect, food);
     if (collision)
     {
         // false, because we want to check first for a good food position
@@ -153,53 +214,89 @@ void collision_logic()
     }
 }
 
+void losing_logic()
+{
+    // The snake eats itself
+    for (int i = 1; i <= length; i++)
+    {
+        if ((snake[0].snake_rect.x == snake[i].snake_rect.x) && (snake[0].snake_rect.y == snake[i].snake_rect.y))
+        {
+            game_state = game_over;
+        }
+    }
+
+    // snake hit the border of the play field
+    if (
+        (snake[0].snake_rect.x + snake[0].snake_rect.width > screen_width - GRID_BOX) ||
+        (snake[0].snake_rect.x < GRID_BOX) ||
+        (snake[0].snake_rect.y + snake[0].snake_rect.height > screen_height - GRID_BOX) ||
+        (snake[0].snake_rect.y < GRID_BOX))
+    {
+        game_state = game_over;
+    }
+}
+
 void draw_game()
 {
     BeginDrawing();
-    ClearBackground(LIGHTGRAY);
+    ClearBackground(BG_COLOR);
 
-    // Draw Grid - here we are iterating using i as cols and rows not pixels
-    // vertical lines
-    for (int i = 1; i < screen_height / GRID_BOX; i++)
+    switch (game_state)
     {
-
-        DrawLineV((Vector2){1 * GRID_BOX, i * GRID_BOX}, (Vector2){(screen_width - GRID_BOX), i * GRID_BOX}, GRAY);
-    }
-    // Horizontal
-    for (int i = 1; i < screen_width / GRID_BOX; i++)
+    case start_screen:
     {
-
-        DrawLineV((Vector2){i * GRID_BOX, 1 * GRID_BOX}, (Vector2){i * GRID_BOX, (screen_height - GRID_BOX)}, GRAY);
+        DrawText("SNAKE GAME",(screen_width - MeasureText("Game Paused", 40)) / 2, 200, 40, START_TITLE_TEXT);
+        DrawText("Press ENTER To Start",  (screen_width - MeasureText("Press ENTER To Start", 20)) / 2, 270, 20, SEC_TEXT);
     }
+    break;
 
-    // Draw Player
-    DrawRectangleRec(snake[0].snake_rect, BLACK);
-    for (int i = 1; i <= length; i++)
+    case game_play:
     {
-        DrawRectangleRec(snake[i].snake_rect, DARKBLUE);
+        // Draw Grid - here we are iterating using i as cols and rows not pixels
+        // vertical lines
+        for (int i = 1; i < screen_height / GRID_BOX; i++)
+        {
+
+            DrawLineV((Vector2){1 * GRID_BOX, i * GRID_BOX}, (Vector2){(screen_width - GRID_BOX), i * GRID_BOX}, GRID_COLOR);
+        }
+        // Horizontal
+        for (int i = 1; i < screen_width / GRID_BOX; i++)
+        {
+
+            DrawLineV((Vector2){i * GRID_BOX, 1 * GRID_BOX}, (Vector2){i * GRID_BOX, (screen_height - GRID_BOX)}, GRID_COLOR);
+        }
+
+        // Draw Player
+        DrawRectangleRec(snake[0].snake_rect, SNAKE_HEAD_COLOR);
+        for (int i = 1; i <= length; i++)
+        {
+            DrawRectangleRec(snake[i].snake_rect, SNAKE_BODY_COLOR);
+        }
+
+        // Draw food
+        DrawRectangleRec(food, FOOD_COLOR);
+        DrawText(TextFormat("SCORE %i", length), 10, 10, 25, SCORE_TEXT);
     }
+    break;
+    case pause_screen:
+    {
+        DrawRectangle(200, 150, 400, 200, BG_COLOR);
+        DrawText("Game Paused", (screen_width - MeasureText("Game Paused", 40)) / 2, 200, 40, GAME_PAUSED_TEXT);
+        DrawText("Press ENTER To Resume", (screen_width - MeasureText("Press ENTER To Resume", 20)) / 2, 270, 20, SEC_TEXT);
+    }
+    break;
 
-    // Draw food
-    DrawRectangleRec(food, BLUE);
-    DrawText(TextFormat("length %i", length), 5, 5, 20, BLACK);
-
-    // switch (game_state)
-    // {
-    // case game_over:
-    // {
-    //     DrawRectangle(GRID_BOX, GRID_BOX, screen_width - GRID_BOX, screen_height - GRID_BOX, LIGHTGRAY);
-    //     DrawText("GAME OVER",
-    //              (screen_width - MeasureText("GAME OVER", 20)) / 2,
-    //              screen_height - 10,
-    //              20, BLACK
-
-    //     );
-    // }
-    // break;
-
-    // default:
-    //     break;
-    // }
+    case game_over:
+    {
+        DrawRectangle(200, 150, 400, 300, BG_COLOR);
+        DrawText("GAME OVER", (screen_width - MeasureText("GAME OVER", 40)) / 2, 200, 40, GAME_OVER_TEXT);
+        DrawText("Press ENTER to Play Again", (screen_width - MeasureText("Press ENTER to Play Again", 20)) / 2, 270, 20, SEC_TEXT);
+        DrawText("Press ESC to Exit", (screen_width - MeasureText("Press ESC to Exit", 20)) / 2, 310, 20, SEC_TEXT);
+    }
+    break;
+    default:
+        break;
+    }
 
     EndDrawing();
 }
