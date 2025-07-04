@@ -14,11 +14,6 @@ It has been an interesting few days to actually learn Raylib from scratch and ha
 
 🚀 You can take a look at the logic i used throughout the implementation from [DEV_LOG.md](https://github.com/Engy-Elyamany/snake_game_using_raylib/blob/main/DEV_LOG.md), I also used it as my daily to-do list and a study-log 
 
-
-![Capture](https://github.com/user-attachments/assets/a161262d-6381-4fbd-9014-0a357a67ed75) ![Snake 2025-06-28 23-59-14 - frame at 0m18s](https://github.com/user-attachments/assets/cc48efa2-c885-42c1-8183-676de18d9160) ![Capture PNG3](https://github.com/user-attachments/assets/cf01714c-db99-4c6c-bf9b-31f4d9146dfc)
-
-
-
 https://github.com/user-attachments/assets/4c07ce58-00be-4a39-95f8-32df1f2b6d61
 
 
