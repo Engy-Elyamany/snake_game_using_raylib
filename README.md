@@ -19,6 +19,10 @@ It has been an interesting few days to actually learn Raylib from scratch and ha
 
 
 
+https://github.com/user-attachments/assets/4c07ce58-00be-4a39-95f8-32df1f2b6d61
+
+
+
 ## 📃Features
 - Classic Snake gameplay mechanics
 - Grid-based movement system
