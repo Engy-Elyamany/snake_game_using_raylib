@@ -88,10 +88,10 @@
 
 ### [ Friday 27-6-2025  05:30 ] :
 1. modified screen width and added padding around the play field
-2. An overdue task that should have been sone earlir : organized the code more clearly
+2. An overdue task that should have been done earlier : organized the code more clearly
 3. implemented losing logic
 4. Handeled different states of the game 
-5. Intial try on colors
+5. Initial try on colors
 6. a weird bug keeps on happening on first collision, still trying to figure it out !!!
 
 
